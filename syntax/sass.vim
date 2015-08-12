@@ -12,19 +12,19 @@ runtime! syntax/css.vim
 
 syn case ignore
 
-syn cluster sassCssProperties contains=cssFontProp,cssFontDescriptorProp,cssColorProp,cssTextProp,cssBoxProp,cssGeneratedContentProp,cssPagingProp,cssUIProp,cssRenderProp,cssAuralProp,cssTableProp
-syn cluster sassCssAttributes contains=css.*Attr,sassEndOfLineComment,scssComment,cssValue.*,cssColor,cssURL,sassDefault,cssImportant,cssError,cssStringQ,cssStringQQ,cssFunction,cssUnicodeEscape,cssRenderProp
+syn cluster sassCssProperties contains=css.*Prop,cssVendor,cssHacks,cssComment
+syn cluster sassCssAttributes contains=css.*Attr,sassEndOfLineComment,scssComment,cssValue.*,cssColor,cssURL,sassDefault,cssImportant,cssError,cssStringQ,cssStringQQ,cssFunction,cssUnicodeEscape,cssRenderProp,cssVendor,cssHacks,cssComment
 
 syn region sassDefinition matchgroup=cssBraces start="{" end="}" contains=TOP
 
-syn match sassProperty "\%([{};]\s*\|^\)\@<=\%([[:alnum:]-]\|#{[^{}]*}\)\+\s*:" contains=css.*Prop skipwhite nextgroup=sassCssAttribute contained containedin=sassDefinition
-syn match sassProperty "^\s*\zs\s\%(\%([[:alnum:]-]\|#{[^{}]*}\)\+\s*:\|:[[:alnum:]-]\+\)"hs=s+1 contains=css.*Prop skipwhite nextgroup=sassCssAttribute
-syn match sassProperty "^\s*\zs\s\%(:\=[[:alnum:]-]\+\s*=\)"hs=s+1 contains=css.*Prop skipwhite nextgroup=sassCssAttribute
+syn match sassProperty "\%([{};]\s*\|^\)\@<=\%([[:alnum:]-]\|#{[^{}]*}\)\+\s*:" contains=@sassCssProperties skipwhite nextgroup=sassCssAttribute contained containedin=sassDefinition
+syn match sassProperty "^\s*\zs\s\%(\%([[:alnum:]-]\|#{[^{}]*}\)\+\s*:\|:[[:alnum:]-]\+\)"hs=s+1 contains=@sassCssProperties skipwhite nextgroup=sassCssAttribute
+syn match sassProperty "^\s*\zs\s\%(:\=[[:alnum:]-]\+\s*=\)"hs=s+1 contains=@sassCssProperties skipwhite nextgroup=sassCssAttribute
 syn match sassCssAttribute +\%("\%([^"]\|\\"\)*"\|'\%([^']\|\\'\)*'\|#{[^{}]*}\|[^{};]\)*+ contained contains=@sassCssAttributes,sassVariable,sassFunction,sassInterpolation
 syn match sassGlobal "!global\>" contained
 syn match sassDefault "!default\>" contained
-syn match sassVariable "!\%(important\>\|global\|default\>\)\@![[:alnum:]_-]\+"
-syn match sassVariable "$[[:alnum:]_-]\+"
+syn match sassVariable "!\%(important\>\|global\|default\>\)\@![[:alnum:]_-]\+" containedin=cssFunction
+syn match sassVariable "$[[:alnum:]_-]\+" containedin=cssFunction
 syn match sassVariableAssignment "\%([!$][[:alnum:]_-]\+\s*\)\@<=\%(||\)\==" nextgroup=sassCssAttribute skipwhite
 syn match sassVariableAssignment "\%([!$][[:alnum:]_-]\+\s*\)\@<=:" nextgroup=sassCssAttribute skipwhite
 
@@ -87,7 +87,7 @@ hi def link sassCssComment              sassComment
 hi def link sassComment                 Comment
 hi def link sassGlobal                  cssImportant
 hi def link sassDefault                 cssImportant
-hi def link sassVariable                Identifier
+hi def link sassVariable                Macro
 hi def link sassFunction                Function
 hi def link sassContent                 PreProc
 hi def link sassMixing                  PreProc
@@ -109,11 +109,11 @@ hi def link sassError                   sassControl
 hi def link sassControl                 PreProc
 hi def link sassFor                     PreProc
 hi def link sassEscape                  Special
-hi def link sassIdChar                  Special
-hi def link sassClassChar               Special
+hi def link sassIdChar                  sassId
+hi def link sassClassChar               sassClass
 hi def link sassInterpolationDelimiter  Delimiter
-hi def link sassAmpersand               Character
-hi def link sassId                      Identifier
+hi def link sassAmpersand               Keyword
+hi def link sassId                      Type
 hi def link sassClass                   Type
 
 let b:current_syntax = "sass"
